@@ -52,17 +52,25 @@ int compter(string tel, char c){
 
 bool comparerChaines(string chaineEval, string modele){
 
-    bool estPresent = 0;
+    bool estPresent = 1;
     for (int i = 0, nbCars = chaineEval.length() ; i < nbCars; i++ ){
-        if (modele.find(chaineEval[i]) >= 0 && modele.find(chaineEval[i] < nbCars)) 
-        estPresent = 1;
+        if (modele.find(chaineEval[i]) == -1) {
+            estPresent = 0;
+        }
     }
     return estPresent;
 }
 
+string sontAbsents(string chaineEval, string modele){
+
+    string absents = "";
+
+    return absents;
+}
+
 int main(){
 
-    string telUdem = "5143436111", telJean = "4501237654", telTest= "514111222";
+    string telUdem = "5143436111", telJean = "4501237654", telTest= "5143369898";
 
     // Afficher les numéros de téléphone en format (XXX) XXX-XXXX
 
@@ -77,9 +85,12 @@ int main(){
     cout << "Il y a " << compter(telJean, '4') << " fois le chiffre 4 dans le numero de telephone de UdeM" << endl;
     
     // Comparer telUdeM et telJean pour déterminer si tous les chiffres de l'Udem se trouve dans telJean
-
+    
     cout << "Tous les chiffres du numero de telephone de l'UdeM se retrouve dans celui de Jean ? " << endl;
     cout << "Reponse: " << (comparerChaines(telUdem, telJean) ? " Oui !" : " Non !" ) << endl;
+
+    cout << "Tous les chiffres du numero de telephone telTest se retrouve dans celui de Jean ? " << endl;
+    cout << "Reponse: " << (comparerChaines(telTest, telJean) ? " Oui !" : " Non !" ) << endl;
 
     // SUITE A FAIRE...
 }
