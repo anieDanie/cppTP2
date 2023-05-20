@@ -4,7 +4,7 @@
     Auteure: Annie Rhéaume
     Date: 19-05-2023
 
-    Version : initiale (spécifications 1, 2 et 3)
+    Version : initiale (spécifications 1, 2, 3, 4)
 
 */
 
@@ -15,6 +15,7 @@
 #include<stdlib.h>
 
 using namespace std;
+
 
 /*
     Fonction qui donne un nouveau format à un numéro de téléphone. Prend en 
@@ -53,7 +54,7 @@ int compter(string tel, char c){
 bool comparerChaines(string chaineEval, string modele){
 
     bool estPresent = 1;
-    for (int i = 0, nbCars = chaineEval.length() ; i < nbCars; i++ ){
+    for (int i = 0; i < chaineEval.length(); i++ ){
         if (modele.find(chaineEval[i]) == -1) {
             estPresent = 0;
         }
@@ -61,10 +62,25 @@ bool comparerChaines(string chaineEval, string modele){
     return estPresent;
 }
 
-string sontAbsents(string chaineEval, string modele){
+/*
+    Fonction qui compare 2 chaînes de caractères et qui repère
+    les caractères de la chaîne modèle qui ne se trouve pas dans la chaine évaluée.
+    Prend en paramètre la chaine à évaluer et la chaîne modèle, retourne
+    un string qui comprend tous les caractères absents.
+*/
+
+string trouverAbsents(string chaineEval, string modele){
 
     string absents = "";
 
+    for (int i = 0; i < chaineEval.length() ; i++ ){
+        if (modele.find(chaineEval[i]) == -1) {
+            if(i > 0){
+                absents += " ";
+            }
+            absents += chaineEval.at(i);
+        }
+    }
     return absents;
 }
 
@@ -92,5 +108,11 @@ int main(){
     cout << "Tous les chiffres du numero de telephone telTest se retrouve dans celui de Jean ? " << endl;
     cout << "Reponse: " << (comparerChaines(telTest, telJean) ? " Oui !" : " Non !" ) << endl;
 
-    // SUITE A FAIRE...
+    // Comparer telUdeM et telJean pour déterminer quels sont les chiffres du numéro de téléphone de Jean qui ne se trouve pas dans celui de l'UdeM
+
+    cout << "Les chiffres du numeros de telephone de Jean qui ne figurent pas dans celui de l'UdeM :" << endl;
+    cout << "Reponse :" << trouverAbsents(telJean, telUdem) << endl;
+
+    // CONTINUER avec 5
+
 }

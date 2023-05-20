@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # Compiled CPP files .exe
 *.exe
+
+# repertoire Extra qui contient références additionnelles
+extra/*.docx
