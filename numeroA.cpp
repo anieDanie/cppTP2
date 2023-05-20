@@ -2,9 +2,11 @@
     TP2 - numero A
 
     Auteure: Annie Rhéaume
-    Date: 19-05-2023
+    Date: 20-05-2023
 
-    Version : initiale (spécifications 1, 2, 3, 4)
+    Version 1 (complète): spécifications 1 à 7
+
+    NOTA: comprend encore la variable telTest (à enlever pour version finale)
 
 */
 
@@ -20,10 +22,10 @@ using namespace std;
 /*
     Fonction qui donne un nouveau format à un numéro de téléphone. Prend en 
     paramètre une chaîne de caractère comprenant 10 chiffres et retourne
-    une chaîne de caractère comprenant le numéro reformaté.
+    une chaîne de caractères comprenant le numéro reformaté.
 */
 
-string getTel(string tel){
+string obtenirTel(string tel){
 
     if (tel.length() == 10)
         return "(" + tel.substr(0,3) + ") " + tel.substr(3,3) + "-" + tel.substr(6,4);
@@ -40,7 +42,7 @@ int compter(string tel, char c){
 
     int n = 0;
     for (int i = 0; i < tel.length(); i++)
-        if (tel[i] == c) n++;
+        if (tel.at(i) == c) n++;
     return n;
 }
 
@@ -55,7 +57,7 @@ bool comparerChaines(string chaineEval, string modele){
 
     bool estPresent = 1;
     for (int i = 0; i < chaineEval.length(); i++ ){
-        if (modele.find(chaineEval[i]) == -1) {
+        if (modele.find(chaineEval.at(i)) == string::npos) {
             estPresent = 0;
         }
     }
@@ -74,7 +76,7 @@ string trouverAbsents(string chaineEval, string modele){
     string absents = "";
 
     for (int i = 0; i < chaineEval.length() ; i++ ){
-        if (modele.find(chaineEval[i]) == -1) {
+        if (modele.find(chaineEval.at(i)) == string::npos) {
             if(i > 0){
                 absents += " ";
             }
@@ -84,15 +86,74 @@ string trouverAbsents(string chaineEval, string modele){
     return absents;
 }
 
+/*
+    Fonction qui repère les chiffres impairs dans une chaîne de caractères. Prend une
+    chaîne de caractères en paramètre et retourne un string qui comprend les chiffres impairs trouvés.
+*/
+
+string trouverImpairs(string chaine){
+
+    string impairs = "";
+
+    for (char c = '1'; c <= '9'; c += 2){
+        if (chaine.find(c) != string::npos){
+            if (c > 1){
+                impairs += " ";
+            }
+            impairs += c;
+        }
+    }
+    return impairs;
+}
+
+/*
+    Fonction qui repère les chiffres pairs dans une chaîne de caractères. Prend une
+    chaîne de caractères en paramètre et retourne un string qui comprend les chiffres pairs trouvés.
+*/
+
+string trouverPairs(string chaine){
+
+    string pairs = "";
+
+    for (char c = '0'; c <= '8'; c += 2){
+        if (chaine.find(c) != string::npos){
+            if (c > 1){
+                pairs += " ";
+            }
+            pairs += c;
+        }
+    }
+    return pairs;
+}
+
+/*
+    Fonction qui retourne l'indice de la valeur minimale dans une chaine
+    de caractère (selon code ASCII). Prend en paramètre une chaine de caractères
+    et retourne la valeur de l'indice (int).
+*/
+
+int trouverIndMin (string chaine){
+    int tailleChaine = chaine.length();
+    int indMin = 0;
+
+    for (int i = 0; i  < tailleChaine; i++){
+        if (chaine.at(i) < chaine.at(indMin)){
+            indMin = i;
+        }
+    }
+    return indMin;
+}
+
+
 int main(){
 
     string telUdem = "5143436111", telJean = "4501237654", telTest= "5143369898";
 
-    // Afficher les numéros de téléphone en format (XXX) XXX-XXXX
+    // Obtenir les numéros de téléphone en format (XXX) XXX-XXXX
 
-    cout << "Le telephone de l'Universite de Montreal : " + getTel(telUdem) << endl;
-    cout << "Le telephone de Jean : " + getTel(telJean) << endl;
-    cout << "Le telephone de Jean : " + getTel(telTest) << endl;
+    cout << "Le telephone de l'Universite de Montreal : " + obtenirTel(telUdem) << endl;
+    cout << "Le telephone de Jean : " + obtenirTel(telJean) << endl;
+    cout << "Le telephone 'test' : " + obtenirTel(telTest) << endl;
 
     // Compter le nombre de fois qu'apparaît un chiffre dans un numéro de téléphone
 
@@ -111,8 +172,53 @@ int main(){
     // Comparer telUdeM et telJean pour déterminer quels sont les chiffres du numéro de téléphone de Jean qui ne se trouve pas dans celui de l'UdeM
 
     cout << "Les chiffres du numeros de telephone de Jean qui ne figurent pas dans celui de l'UdeM :" << endl;
-    cout << "Reponse :" << trouverAbsents(telJean, telUdem) << endl;
+    cout << "Reponse: " << trouverAbsents(telJean, telUdem) << endl;
 
-    // CONTINUER avec 5
+    // Trouver les chiffres impairs dans le numéro de téléphone de Jean
 
+    cout << "Les chiffres impairs dans le numero de telephone de Jean : " << endl;
+    cout << "Reponse: " << trouverImpairs(telJean) << endl;
+
+    // Trouver les chiffres pairs dans le numéro de téléphone de l'UdeM
+
+    cout << "Les chiffres pairs dans le numero de telephone de l'UdeM : " << endl;
+    cout << "Reponse: " << trouverPairs(telUdem) << endl;
+
+    // Trouver l'indice du plus petit chiffre dans un numero de teléphone (sous forme de chaine de caractères)
+
+    cout << "Le plus petit chiffre du numero de telephone de l'UdeM: " << telUdem.at(trouverIndMin(telUdem)) << endl;
+    cout << "Le plus petit chiffre du numero de telephone de Jean: " << telJean.at(trouverIndMin(telJean)) << endl;
 }
+
+/*
+
+    AFFICHAGE
+
+        C:\Users\Annie\Desktop\cppTP2>numeroA.exe
+
+        Le telephone de l'Universite de Montreal : (514) 343-6111
+        Le telephone de Jean : (450) 123-7654
+        Le telephone 'test' : (514) 336-9898
+
+        Il y a 2 fois le chiffre 3 dans le numero de telephone de UdeM
+        Il y a 4 fois le chiffre 1 dans le numero de telephone de UdeM
+        Il y a 2 fois le chiffre 4 dans le numero de telephone de UdeM
+
+        Tous les chiffres du numero de telephone de l'UdeM se retrouve dans celui de Jean ?
+        Reponse:  Oui !
+        Tous les chiffres du numero de telephone telTest se retrouve dans celui de Jean ?
+        Reponse:  Non !
+
+        Les chiffres du numeros de telephone de Jean qui ne figurent pas dans celui de l'UdeM :
+        Reponse:  0 2 7
+
+        Les chiffres impairs dans le numero de telephone de Jean :
+        Reponse:  1 3 5 7
+
+        Les chiffres pairs dans le numero de telephone de l'UdeM :
+        Reponse:  4 6
+        
+        Le plus petit chiffre du numero de telephone de l'UdeM: 1
+        Le plus petit chiffre du numero de telephone de Jean: 0    
+
+*/
