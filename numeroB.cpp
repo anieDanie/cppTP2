@@ -156,7 +156,7 @@ using namespace std; // librairie standard
       Fonction qui permet d'afficher tous les éléments du tableau de structs
    */
 
-   void AfficherTousEmployes(Employe tab[], int nbEmp){
+   void afficherListeEmployes(Employe tab[], int nbEmp){
 
       for (int i = 0; i  < nbEmp ; i++){
          cout << "Element - " << i << endl;
@@ -169,7 +169,7 @@ using namespace std; // librairie standard
       Fonction qui permet d'afficher le résultat (en mots) de la recherche d'une valeur dans le tableau
    */
 
-   void AfficherResultatRecherche(Employe tab[], int nbEmp, int valeurRecherchee, int indice){
+   void afficherResultatRecherche(Employe tab[], int nbEmp, int valeurRecherchee, int indice){
       if (indice == -1){
       cout << valeurRecherchee << " => introuvable";
    } else {
@@ -190,12 +190,12 @@ using namespace std; // librairie standard
       // Trier le tableau de structures selon le numéro d'employé
       trier(emp, 0, nbEmp-1);
 
-      //AfficherTousEmployes(emp, nbEmp);
+      afficherListeEmployes(emp, nbEmp);
 
       // Rechercher dans le tableau des employés les numéros: 272, 607, 993
-      AfficherResultatRecherche(emp, nbEmp, 272,rechercher(emp, nbEmp, 272));
-      AfficherResultatRecherche(emp, nbEmp, 607,rechercher(emp, nbEmp, 607));
-      AfficherResultatRecherche(emp, nbEmp, 993,rechercher(emp, nbEmp, 993));
+      afficherResultatRecherche(emp, nbEmp, 272,rechercher(emp, nbEmp, 272));
+      afficherResultatRecherche(emp, nbEmp, 607,rechercher(emp, nbEmp, 607));
+      afficherResultatRecherche(emp, nbEmp, 993,rechercher(emp, nbEmp, 993));
 
       return 0;
 
