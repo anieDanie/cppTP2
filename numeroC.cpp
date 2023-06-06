@@ -2,22 +2,22 @@
     TP2 - numero C
 
     Auteure: Annie Rhéaume
-    Date: 27-05-2023
+    Date: 05-06-2023
 
     source: fichier Tab_Pers.cpp
 
     Version 1: 
-      -dans cette version, j'ai essentiellement
-      crée des getters et des setters pour accéder et modifier
-      les valeurs de champs des objets de Personne.
-      -beaucoup de redondance de code (en raison de l'impossibilité
-      d'accéder aux données de la classe...)
-      -toutes les fonctions "statistiques" ne sont pas considérées
-      comme des fonctions membres de la classe Personne (seulement
-      des fonctions du programme)
-      -NUMERO C: essentiellement une synthese TP1 et TP2 numeroB 
-      (rien sur les Strings), pour manipuler des objets dans un
-      tableau (plutôt que des types primitifs)
+      -dans cette version, j'ai modifié les méthodes statiques et les appels
+      dans le main en lien avec le tri rapide et la recherche dichotomique
+        --> Patron de fonction, pour le QUICKSORT
+          ----> surcharge des opérateurs de comparaison pour comparer les objets
+        --> Patron de fonction pour le BINARYSEARCH + version RÉCURSIVE
+          ----> surchage des opérateurs + constructeur (ajout de 4: numero seulement)
+          pour comparaison des objets
+      -NUMERO C: à présent, comprend les nouveautés en lien avec la manipulation
+      d'objets dans des tableaux.
+
+      - Il me reste à réviser cette version pour la remise.
 
 */
 
@@ -42,11 +42,17 @@ class Personne
       int numero;
    public :
 
-    // Déclaration constructeur avec paramèetres      
+    // Constructeur 1: tous les paramètres      
     Personne(char sexe, int numero, float taille, float poids);
     
-    // Constructeur par défaut explicite 
-    Personne()  {}  
+    // Constructeur 2: par défaut explicite (sans paramètre) 
+    Personne()  {} 
+
+    // Constructeur 3: de recopie explicite
+    Personne (const Personne&); 
+
+    // Constructeur 4: un paramètre (numero)
+    Personne (int numero);
 
     // Déclaration des 'getters' pour les champs de la classe Personne
     float getTaille();
@@ -58,12 +64,20 @@ class Personne
     void setNumero(int val);
 
     // Déclaration fonction membre afficher
-    void afficher(); 
+    void afficher();
+
+    //Déclaration des opérateurs surdéfinis
+    bool operator<= (const Personne&);
+    bool operator>= (const Personne&); 
+    bool operator== (const Personne&);
+    bool operator< (const Personne&);    
 
 };
 
+// MÉTHODES DE LA CLASSE PERSONNE
+
 /*
-  Définition du contructeur avec paramètres (tous les champs)
+  Définition du contructeur 1: avec paramètres (tous les champs)
 */
 Personne::Personne(char sexe, int numero, float taille, float poids)
       {
@@ -73,6 +87,25 @@ Personne::Personne(char sexe, int numero, float taille, float poids)
         this->poids = poids;            
       } 
 
+
+/*
+    Définition du constructeur 3: de recopie explicite
+*/
+    
+    Personne::Personne(const Personne& autre ){
+        this->sexe = autre.sexe;
+        this->numero = autre.numero;
+        this->taille = autre.taille;
+        this->poids = autre.poids; 
+    }
+
+/*
+    Définition du constructeur 4: 1 paramètre (numero)
+*/    
+    Personne::Personne(int numero ){
+        this->numero = numero; 
+    }
+    
 /*
   Définition du 'getter' pour le champ taille
   Accesseur retourne la taille d'une personne.
@@ -126,10 +159,48 @@ void Personne::afficher()
 {
   cout << "sexe             : " << (sexe == 'F'? "feminin" : "masculin") << endl ;
   cout << "numero           : " << numero << endl ;
-  cout << "taille           : " << taille << endl ;
-  cout << "poids            : " << poids << " $\n\n";
-}  
+  cout << "taille           : " << setprecision(2) << taille << " metre" << endl ;
+  cout << "poids            : " << setprecision(1) << poids << " kg\n\n";
+}
+/*
+    Comparateur selon l'attribut numero
+    Surcharge operateur <= 
+*/
+bool Personne::operator<= (const Personne& autre){
+    if (this->numero <= autre.numero)
+        return true;
+    return false;
+}
 
+/*
+    Comparateur selon l'attribut numero
+    Surcharge operateur  >= 
+*/
+bool Personne::operator>= (const Personne& autre){
+    if (this->numero >= autre.numero)
+        return true;
+    return false;
+}
+
+/*
+    Surcharge opérateur ==
+*/
+bool Personne::operator==(const Personne& autre){
+  if (this->numero == autre.numero)
+      return true;
+  return false;
+}
+
+/*
+    Surcharge opérateur <
+*/
+bool Personne::operator<(const Personne& autre){
+  if (this->numero < autre.numero)
+      return true;
+  return false;
+}
+
+// MÉTHODES STATIQUES
 
 /*
   Fonction qui lit une fichier .txt et qui crée un tableau d'objets
@@ -263,104 +334,100 @@ void calculerPoidsMoyenFemmes(Personne tab[], int nbElem, float& refMoyenne){
     refMoyenne = somme / nbFemmes;  
 }
 
-//Quicksort
+// QUICKSORT
 
 /*
-  Fonction qui prend en paramètre un tableau de Personne et les indices
-  de 2 valeurs à permuter dans le tableau. Ne retourne rien.
-  Spécifique au type Personne, pour accéder à son membre données 'numero'
+    Echange les objets dans un tableau selon les indices fournis en paramètre
+    Patron de fonction (copie possible objets de même type via constructeur de recopie)
 */
-void permuter(Personne tab[], int indiceA, int indiceB){
-  int temp = tab[indiceA].getNumero();
-  tab[indiceA].setNumero(tab[indiceB].getNumero());
-  tab[indiceB].setNumero(temp);
+template<class T>
+void permuter(T tab[], int indiceA, int indiceB){
+    Personne temp = tab[indiceA];
+    tab[indiceA] = tab[indiceB];
+    tab[indiceB] = temp;
 }
 
 /*
-  Fonction qui trie les objets de type Personne d'un tableau selon 
-  l'ordre croissant du numéro d'identifiant. Ne retourne rien.
-  Spécifique au type Personne, pour accéder à son membre données 'numero'
-  Implémentation d'un algorithme du tri rapide (quicksort)
+    Trie un tableau d'objets de même type selon les opérateurs de comparaison surdéfinis 
+    dans la classe. Ne retourne rien (modification 'sur place').
+    Algorithme tri rapide récursif
+    Patron de fonction (copue possible objets de même type via constructeur de recopie)
 */
-  void trier(Personne tab[], int indiceMin, int indiceMax){
+template <class T>
+void trier(T tab[], int indiceMin, int indiceMax){
+    
+    // Condition de sortie de la boucle récursive
+    if(indiceMin >= indiceMax)
+        return;
 
-  // Condition de sortie de la boucle récursive
-  if(indiceMin >= indiceMax)
-      return;
+    // Sélectionner un pivot
+    Personne pivot = tab[indiceMax];                    // CONSTRUCTEUR RECOPIE PAR DEFAUT
 
-  // Sélectionner un pivot
-  int pivot = tab[indiceMax].getNumero();
+    // Créer traceurs gauche et droite
+    int g = indiceMin;
+    int d = indiceMax;
 
-  // Créer traceurs gauche et droite
-  int g = indiceMin;
-  int d = indiceMax;
+    // Aussi longtemps que les traceurs gauche et droite ne se rencontrent pas
+    while(g < d){
 
-  // Aussi longtemps que les traceurs gauche et droite ne se rencontrent pas
-  while(g < d){
+        // On cherche une valeur plus petite que le pivot
+        while(tab[g] <= pivot && g < d){                // SURCHARGE OPERATEUR <= DANS PERSONNE
+            g++;
+        }
 
-      // On cherche une valeur plus petite que le pivot
-      while(tab[g].getNumero() <= pivot && g < d){
-        g++;
-      }
+        // On cherche une valeur plus grande que le pivot
+        while(tab[d] >= pivot && g < d){                // SURCHARGE OPERATEUR >= DANS PERSONNE
+            d--;
+        }
 
-      // On cherche une valeur plus grande que le pivot
-      while(tab[d].getNumero() >= pivot && g < d){
-        d--;
-      }
+        // Permuter les valeurs pointées par les traceurs g et d
+        permuter(tab, g, d);
+    }
 
-      // Permuter les valeurs pointées par les traceurs g et d
-      permuter(tab, g, d);
-  }
+    // Lorsque les traceurs d et g se rejoignent,
+    // Permuter la valeur pointée par traceur d et celle à indiceMax
+    permuter(tab, g, indiceMax);
 
-  // Lorsque les traceurs d et g se rejoignent,
-  // Permuter la valeur pointée par traceur d et celle à indiceMax
-  permuter(tab, g, indiceMax);
+    // Trier les sous-tableaux (à gauche et à droite du pivot) récursivement
+    trier(tab, indiceMin, g-1);
+    trier(tab, g+1, indiceMax);
+}
 
-  // Trier les sous-tableaux (à gauche et à droite du pivot) récursivement
-  trier(tab, indiceMin, g-1);
-  trier(tab, g+1, indiceMax);
-}    
-
-//Recherche dichotomique
+// RECHERCHE DICHOTOMIQUE
 
 /*
-  Fonction qui recherche une valeur (clé) dans un tableau d'objets de type
-  Personne, trié selon le 'numero'. Retourne l'indice de la valeur recherchee, 
-  ou -1, si absente.
-  Spécifique au type Personne, pour accéder à son membre données 'numero'
-  Implémentation d'un algorithme de recherche dichotomique (binary search)
+   Recherche une valeur (clé) dans un tableau d'objets de même type selon les opérateurs de
+   comparaison surdéfinis dans la classe. Retourne l'indice de la clé (type int).
+   Algorithme de recherche dichotomique récursif
+   Patron de fonction (copie possible objets de même type via constructeur de recopie)
 */
-int rechercher(Personne tab[], int nbElem, int cle) {  
-  
-  // Traceurs gauche et droit
-  int indiceMin = 0;
-  int indiceMax = nbElem-1;
+   template <class T>
+   int rechercher(T tab[], int indiceMin, int indiceMax, T cle) {  
 
-  //Jusqu'à ce que les traceurs se rencontrent...
-  while (indiceMin <= indiceMax)
-  {
+      // condition de sortie de la boucle récursive : lorsque les indices se rencontrent
+      if (indiceMin > indiceMax)
+         return -1; // recherche infructueuse
+
       int milieu = (indiceMin + indiceMax) / 2;
-      int valeurMilieu = tab[milieu].getNumero();
+      Personne valeurMilieu = tab[milieu];                     // CONSTRUCTEUR DE RECOPIE PAR DÉFAUT
 
-      // La valeur recherchée est celle de la position milieu
-      if (cle == valeurMilieu){
-        return milieu;
-      }
-      // Dans ce cas, on continue la recherche à gauche... 
-      if (cle < valeurMilieu){
-        indiceMax = milieu - 1 ;
-      } else { // si n'est pas à gauche, on cherche à droite...
-        indiceMin = milieu + 1;
-      }                             
-  } 
-  // Recherche infructueuse          
-  return -1;               
-} 
+      // La valeur recherchée est celle de la position du milieu
+      if (cle == valeurMilieu)                                 // ON COMPARE 2 OBJETS PERSONNE: SURCHARGE ==
+         return milieu;
+      
+      // Sinon , on continue la recherche à gauche
+      if (cle < valeurMilieu)                                  // ON COMPARE 2 OBJETS PERSONNE: SURCHARGE <
+         rechercher(tab, indiceMin, milieu - 1, cle);
+      else  //si n'est pas à gauche, on avance à droite
+         rechercher(tab, milieu + 1, indiceMax, cle);  
+   } 
 
 /*
-  Fonction qui permet d'afficher le résultat (en mots) de la recherche d'une valeur dans le tableau
+  Fonction qui permet d'afficher le résultat d'une recherche dans le tableau d'objets Personne.
+  Ne retoune rien.
 */
-void afficherResultatRecherche(Personne tab[], int nbPers, int valeurRecherchee, int indice){
+template <class T>
+void afficherResultatRecherche(T tab[], int nbPers, int valeurRecherchee, int indice){
   if (indice == -1){
   cout << valeurRecherchee << " => introuvable";
   } else {
@@ -368,8 +435,12 @@ void afficherResultatRecherche(Personne tab[], int nbPers, int valeurRecherchee,
   }
 }  
 
-
+//  PROGRAMME PRINCIPAL
 int main() {
+
+  // Nécessaire pour le format d'affichage des réels (nombre de décimales après la virgule)
+  cout.setf(ios::fixed);
+  cout.setf(ios::showpoint);  
  
  const int MAX_PERS = 30 ;
  Personne pers[MAX_PERS];
@@ -381,7 +452,7 @@ int main() {
  cout << endl;
 
  // Afficher la liste des personnes (tableau des objets de type Personne)
-afficherListePersonnes("Liste non triee", pers, nbPers);
+//afficherListePersonnes("Liste non triee", pers, nbPers);
 
 // Déterminer et afficher les informations de la personne dont la taille est la plus grande
 cout << "Informations sur la personne dont la taille est la plus grande: " << endl;
@@ -408,69 +479,65 @@ cout<< endl;
 
 // Trier le tableau d'objets de type Personne selon le numéro d'identifiant.
 trier(pers, 0, nbPers - 1);
-afficherListePersonnes("Liste triee", pers, nbPers);
+//afficherListePersonnes("Liste triee", pers, nbPers);
 
 // Rechercher et afficher les informations des enregistrements dont le numéro d'identifiant est: 4433,2879,9876
 cout << "Resultats des recherches dans la liste de personnes:  " << endl;
-afficherResultatRecherche(pers, nbPers, 4433, rechercher(pers, nbPers, 4433));
-afficherResultatRecherche(pers, nbPers, 2879, rechercher(pers, nbPers, 2879));
-afficherResultatRecherche(pers, nbPers, 9876, rechercher(pers, nbPers, 9876));
+Personne cle1 = Personne(4433);
+Personne cle2 = Personne(2879);
+Personne cle3 = Personne(9873);
+afficherResultatRecherche(pers, nbPers, 4433, rechercher(pers, 0, nbPers -1, cle1));
+afficherResultatRecherche(pers, nbPers, 2879, rechercher(pers, 0, nbPers -1, cle2));
+afficherResultatRecherche(pers, nbPers, 9876, rechercher(pers, 0, nbPers -1, cle3));
  
  return 0; 
 }
 
 
 /*
-  AFFICHAGE (fichier initial)
+    AFFICHAGE (fichier modifié) - sans listes complètes
 
-  C:\Users\Annie\Desktop\cppTP2>numeroC.exe
-  On a lu les infos de 20 personnes
+    C:\Users\Annie\Desktop\cppTP2>numeroC.exe
 
-*/
+    On a lu les infos de 20 personnes
 
-/*
-
-AFFICHAGE (fichier modifié) - sans listes complètes
-
-C:\Users\Annie\Desktop\cppTP2>numeroC.exe
-
-On a lu les infos de 20 personnes
-
-Informations sur la personne dont la taille est la plus grande:
-sexe             : feminin
-numero           : 5678
-taille           : 2.0066
-poids            : 86.26 $
+    Informations sur la personne dont la taille est la plus grande: 
+    sexe             : feminin
+    numero           : 5678
+    taille           : 2.01 metre
+    poids            : 86.3 kg
 
 
-Informations sur la personne dont la taille est la plus petite:
-sexe             : feminin
-numero           : 4433
-taille           : 1.4732
-poids            : 57.658 $
+    Informations sur la personne dont la taille est la plus petite: 
+    sexe             : feminin
+    numero           : 4433
+    taille           : 1.47 metre
+    poids            : 57.7 kg
 
 
-Informations sur la personne dont le poids est le plus petit:
-sexe             : feminin
-numero           : 4100
-taille           : 1.651
-poids            : 54.026 $
+    Informations sur la personne dont le poids est le plus petit:
+    sexe             : feminin
+    numero           : 4100
+    taille           : 1.65 metre
+    poids            : 54.0 kg
 
 
-Taille moyenne des hommes: 1.778
-Poids moyen des femmes: 69.4998
+    Taille moyenne des hommes: 1.8
+    Poids moyen des femmes: 69.5
 
-Resultats des recherches dans la liste de personnes:
-sexe             : masculin
-numero           : 4433
-taille           : 1.8796
-poids            : 85.806 $
+    Resultats des recherches dans la liste de personnes:
+    sexe             : feminin
+    numero           : 4433
+    taille           : 1.47 metre
+    poids            : 57.7 kg
 
-sexe             : feminin
-numero           : 2879
-taille           : 1.8796
-poids            : 84.898 $
+    sexe             : masculin
+    numero           : 2879
+    taille           : 1.88 metre
+    poids            : 86.7 kg
 
-9876 => introuvableS
+    9876 => introuvable
 
+
+    AFFICHAGE (fichier modifié) - sans listes complètes
 */

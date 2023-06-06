@@ -78,7 +78,7 @@ string trouverAbsents(string chaineEval, string modele){
     for (int i = 0; i < chaineEval.length() ; i++ ){
         if (modele.find(chaineEval.at(i)) == string::npos) {
             if(i > 0){
-                absents += " ";
+                absents += " "; // pour format en sortie : espace après un caractère
             }
             absents += chaineEval.at(i);
         }
@@ -91,12 +91,12 @@ string trouverAbsents(string chaineEval, string modele){
     chaîne de caractères en paramètre et retourne un string qui comprend les chiffres impairs trouvés.
 */
 
-string trouverImpairs(string chaine){
+string trouverImpairs(string chaineEval){
 
     string impairs = "";
 
     for (char c = '1'; c <= '9'; c += 2){
-        if (chaine.find(c) != string::npos){
+        if (chaineEval.find(c) != string::npos){
             if (c > 1){
                 impairs += " ";
             }
@@ -111,12 +111,12 @@ string trouverImpairs(string chaine){
     chaîne de caractères en paramètre et retourne un string qui comprend les chiffres pairs trouvés.
 */
 
-string trouverPairs(string chaine){
+string trouverPairs(string chaineEval){
 
     string pairs = "";
 
     for (char c = '0'; c <= '8'; c += 2){
-        if (chaine.find(c) != string::npos){
+        if (chaineEval.find(c) != string::npos){
             if (c > 1){
                 pairs += " ";
             }
