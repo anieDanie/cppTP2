@@ -1,13 +1,11 @@
 /*
     TP2 - numero A
+    Description: programme qui présente des fonctions où des méthodes
+    de la classe String de la librairie de C++ sont utilisées pour
+    manipuler des chaînes de caractères.
 
     Auteure: Annie Rhéaume
-    Date: 20-05-2023
-
-    Version 1 (complète): spécifications 1 à 7
-
-    NOTA: comprend encore la variable telTest (à enlever pour version finale)
-
+    Dernière m-a-j: 11-06-2023
 */
 
 
@@ -149,42 +147,38 @@ int main(){
 
     string telUdem = "5143436111", telJean = "4501237654", telTest= "5143369898";
 
-    // Obtenir les numéros de téléphone en format (XXX) XXX-XXXX
+    // 1) Obtenir les numéros de téléphone en format (XXX) XXX-XXXX
 
     cout << "Le telephone de l'Universite de Montreal : " + obtenirTel(telUdem) << endl;
     cout << "Le telephone de Jean : " + obtenirTel(telJean) << endl;
-    cout << "Le telephone 'test' : " + obtenirTel(telTest) << endl;
 
-    // Compter le nombre de fois qu'apparaît un chiffre dans un numéro de téléphone
+    // 2) Compter le nombre de fois qu'apparaît un chiffre dans un numéro de téléphone
 
     cout << "Il y a " << compter(telUdem, '3') << " fois le chiffre 3 dans le numero de telephone de UdeM" << endl;
     cout << "Il y a " << compter(telUdem, '1') << " fois le chiffre 1 dans le numero de telephone de UdeM" << endl;
     cout << "Il y a " << compter(telJean, '4') << " fois le chiffre 4 dans le numero de telephone de UdeM" << endl;
     
-    // Comparer telUdeM et telJean pour déterminer si tous les chiffres de l'Udem se trouve dans telJean
+    // 3) Comparer telUdeM et telJean pour déterminer si tous les chiffres de l'Udem se trouve dans telJean
     
     cout << "Tous les chiffres du numero de telephone de l'UdeM se retrouve dans celui de Jean ? " << endl;
     cout << "Reponse: " << (comparerChaines(telUdem, telJean) ? " Oui !" : " Non !" ) << endl;
 
-    cout << "Tous les chiffres du numero de telephone telTest se retrouve dans celui de Jean ? " << endl;
-    cout << "Reponse: " << (comparerChaines(telTest, telJean) ? " Oui !" : " Non !" ) << endl;
-
-    // Comparer telUdeM et telJean pour déterminer quels sont les chiffres du numéro de téléphone de Jean qui ne se trouve pas dans celui de l'UdeM
+    // 4) Comparer telUdeM et telJean pour déterminer quels sont les chiffres du numéro de téléphone de Jean qui ne se trouve pas dans celui de l'UdeM
 
     cout << "Les chiffres du numeros de telephone de Jean qui ne figurent pas dans celui de l'UdeM :" << endl;
     cout << "Reponse: " << trouverAbsents(telJean, telUdem) << endl;
 
-    // Trouver les chiffres impairs dans le numéro de téléphone de Jean
+    // 5) Trouver les chiffres impairs dans le numéro de téléphone de Jean
 
     cout << "Les chiffres impairs dans le numero de telephone de Jean : " << endl;
     cout << "Reponse: " << trouverImpairs(telJean) << endl;
 
-    // Trouver les chiffres pairs dans le numéro de téléphone de l'UdeM
+    // 6) Trouver les chiffres pairs dans le numéro de téléphone de l'UdeM
 
     cout << "Les chiffres pairs dans le numero de telephone de l'UdeM : " << endl;
     cout << "Reponse: " << trouverPairs(telUdem) << endl;
 
-    // Trouver l'indice du plus petit chiffre dans un numero de teléphone (sous forme de chaine de caractères)
+    // 7) Trouver l'indice du plus petit chiffre dans un numero de teléphone (sous forme de chaine de caractères)
 
     cout << "Le plus petit chiffre du numero de telephone de l'UdeM: " << telUdem.at(trouverIndMin(telUdem)) << endl;
     cout << "Le plus petit chiffre du numero de telephone de Jean: " << telJean.at(trouverIndMin(telJean)) << endl;
@@ -198,7 +192,6 @@ int main(){
 
         Le telephone de l'Universite de Montreal : (514) 343-6111
         Le telephone de Jean : (450) 123-7654
-        Le telephone 'test' : (514) 336-9898
 
         Il y a 2 fois le chiffre 3 dans le numero de telephone de UdeM
         Il y a 4 fois le chiffre 1 dans le numero de telephone de UdeM
@@ -206,8 +199,6 @@ int main(){
 
         Tous les chiffres du numero de telephone de l'UdeM se retrouve dans celui de Jean ?
         Reponse:  Oui !
-        Tous les chiffres du numero de telephone telTest se retrouve dans celui de Jean ?
-        Reponse:  Non !
 
         Les chiffres du numeros de telephone de Jean qui ne figurent pas dans celui de l'UdeM :
         Reponse:  0 2 7

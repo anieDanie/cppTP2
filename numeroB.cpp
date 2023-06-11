@@ -1,11 +1,12 @@
 /* 
     TP2 - numero B
+    Description: programme qui implémente les algorithmes
+    du tri rapide et de la recherche dichotomique pour
+    un tableau de structures (sans surcharge des opérateurs
+    de comparaison)
 
     Auteure: Annie Rhéaume
-    Date: 21-05-2023
-
-    Version 1: ajout des algorithmes de quicksort et recherche
-    dichotomique.
+    Dernière m-a-j: 11-06-2023
 */
 
 #include <iostream>  // pour entree-sortie  cin, cout
@@ -36,7 +37,7 @@ using namespace std; // librairie standard
    };
 
    /* 
-      Fonction qui lit une fichier .txt et qui crée un tableau de structures.
+      Fonction qui lit une fichier .txt et qui crée un tableau de structures
       de type Employe. Fonction du fichier structure.cpp
       Fournie pour le TP2
    */    
@@ -74,6 +75,7 @@ using namespace std; // librairie standard
       numéro d'employé. Ne retourne rien.
       Spécifique au type Employe, pour accéder à son membre données 'numero'
       Implémentation d'un algorithme du tri rapide (quicksort)
+      Algorithme RECURSIF
    */
 
       void trier(Employe tab[], int indiceMin, int indiceMax){
@@ -123,6 +125,7 @@ using namespace std; // librairie standard
       si absente.
       Spécifique au type Employe, pour accéder à son membre données 'numero'
       Implémentation d'un algorithme de recherche dichotomique (binary search)
+      algorithme ITERATIF
    */
 
    int rechercher(Employe tab[], int nbElem, int cle) {  
@@ -141,7 +144,7 @@ using namespace std; // librairie standard
          if (cle == valeurMilieu){
             return milieu;
          }
-         // Dans ce cas, on continue la recherche à gauche... 
+         // si pas valeur du milieu, on continue la recherche à gauche... 
          if (cle < valeurMilieu){
             indiceMax = milieu - 1 ;
          } else { // si n'est pas à gauche, on cherche à droite...
@@ -160,9 +163,8 @@ using namespace std; // librairie standard
 
       for (int i = 0; i  < nbEmp ; i++){
          cout << "Element - " << i << endl;
-         tab[i].afficher("");
+         tab[i].afficher(""); // Appel à la fonction membre
       }
-
    } 
 
    /*
@@ -171,10 +173,10 @@ using namespace std; // librairie standard
 
    void afficherResultatRecherche(Employe tab[], int nbEmp, int valeurRecherchee, int indice){
       if (indice == -1){
-      cout << valeurRecherchee << " => introuvable";
-   } else {
-      tab[indice].afficher("");
-   }
+         cout << valeurRecherchee << " => introuvable";
+      } else {
+      tab[indice].afficher(""); // Appel à la fonction membre
+      }
    }         
 
    // Programme principal
@@ -206,6 +208,10 @@ using namespace std; // librairie standard
       AFFICHAGE:
 
          C:\Users\Annie\Desktop\cppTP2>numeroB.exe
+
+         // Exécuter le programme pour voir le tableau de structs trié selon #employe
+
+         // Résultats de la recherche dichotomique
          :
          sexe             : masculin
          numero           : 272
